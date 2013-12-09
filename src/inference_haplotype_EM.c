@@ -422,3 +422,50 @@ int* recherche_meilleure_paire_haplo(TypeGeno* liste, double** tabFreqHaplo, int
     return ids; /* Retour des ids de la paire d'haplotypes ayant la plus grande frequence */
 }
 
+
+
+
+
+
+
+
+/* Fonction permettant l'ecriture de la paire la plus vraisemblable pour un genotype donne */
+void ecriture_paire_haplotype(TypeGeno** tabGenoNR, double** tabFreqHaplo, int nbHaploNonRedondant, 
+                              TypeHaplo** tabHaploNR, FILE* resultats_haplo, int i, int k)
+{
+    /* Variables locales */
+    int j, c = 0;
+    int* idsPaireHaplo = NULL;  /* tableau contenant les ids de la paire d'haplos 
+                                 * la plus vraisemblable */
+    
+    /* Ecriture du premier haplo de la paire */
+    fprintf(resultats_haplo, "/ind %d haplo1 ", k);
+    idsPaireHaplo = recherche_meilleure_paire_haplo(tabGenoNR[i], tabFreqHaplo, nbHaploNonRedondant);
+    /* Recherche du 1er haplotype de la paire dans le tableau d'haplotypes non redondant */
+    for (c=0; c < nbHaploNonRedondant; c++)
+    {
+        if (idsPaireHaplo[0] == tabHaploNR[c]->id)
+        {
+            for (j=0; j < TAILLE_GENO; j++)
+            {
+                fprintf(resultats_haplo, "%d", tabHaploNR[c]->haplotype[j]);
+            }
+            fprintf(resultats_haplo, "\n");
+        }
+    }
+    
+    /* Ecriture du deuxieme haplo de la paire */
+    fprintf(resultats_haplo, "/ind %d haplo2 ", k);
+    /* Recherche du 2eme haplotype de la paire dans le tableau d'haplotypes non redondant */
+    for (c=0; c < nbHaploNonRedondant; c++)
+    {
+        if (idsPaireHaplo[1] == tabHaploNR[c]->id)
+        {
+            for (j=0; j < TAILLE_GENO; j++)
+            {
+                fprintf(resultats_haplo, "%d", tabHaploNR[c]->haplotype[j]);
+            }
+            fprintf(resultats_haplo, "\n");
+        }
+    } 
+}
