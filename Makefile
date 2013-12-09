@@ -1,6 +1,7 @@
 SRC = src/
 INC = inc/
 EXE = exe/
+FIC = fichiers/
 
 CC = gcc
 DEBUG = 1
@@ -12,7 +13,7 @@ endif
 EXEC = $(EXE)main $(EXE)inference_main $(EXE)verification
 
 
-all: $(EXE) $(EXEC)
+all: $(FIC) $(EXE) $(EXEC)
 
 $(EXE)verification: $(SRC)verification.c $(SRC)fonctions_verification.c
 	@$(CC) $^ -o $@ $(FLAGS)
@@ -24,6 +25,9 @@ $(EXE)main: $(SRC)fonctions.c $(SRC)main.c
 	@$(CC) $^ -o $@ $(FLAGS)
 
 $(EXE):
+	@mkdir $@
+
+$(FIC):
 	@mkdir $@
 
 .PHONY: clean
