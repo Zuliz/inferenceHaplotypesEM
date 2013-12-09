@@ -53,12 +53,12 @@ int main(int argc,char* argv[])
 	test_existence(GENO_HAPLO);
 	test_existence(GENOTYPES);
     
-    /* Recuperation des parametres entrees au clavier */
+    /* Recuperation des parametres entres au clavier */
 	nbIndiv = atoi(argv[1]);
 	tailleGeno = atoi(argv[2]);
 	nbLoci = atoi(argv[3]);
 
-	/* Verifications des parametres entrees au clavier */
+	/* Verifications des parametres entres au clavier */
     if (tailleGeno <= nbLoci)
     {
         printf("Le nombre de loci ambigu maximum doit etre inferieur à la taille du genotype.\n");
@@ -67,12 +67,10 @@ int main(int argc,char* argv[])
 
     /* 
      * Determination du nombre d'haplotypes que l'on veut generer 
-     * pour creer la liste d'haplotypes qui servira a faire generer les genotypes
-     * Le premier nombre peut etre modifier : il faut le faire varier entre 0.5 et 1.
-     *     - a 0.5 : il y aura autant d'haplotypes que de genotypes
-     *     - a 1.0 : il y aura 2 fois plus d'haplotypes que de genotypes 
+     * pour creer la liste d'haplotypes qui servira a faire creer les genotypes
+     * Le premier nombre peut etre modifie.
      */
-	nbHaplo = 0.8*nbIndiv;
+	nbHaplo = 1.5*nbIndiv;
     
     /* Allocation de memoire pour les tableaux de genotypes et d'haplotypes */
     haplo = malloc(NB_HAPLO * sizeof(TypeHaplo));
@@ -87,13 +85,13 @@ int main(int argc,char* argv[])
 	}
 
 	/*
-     * parcours la liste d'haplotypes pour verifier l'absence de doublon.
+     * Parcours la liste d'haplotypes pour verifier l'absence de doublon.
      * si un doublon est present, le premier croise obtient un VRAI
      * dans l'element doublon.
 	 */
 	recherche_haplotype_doublon(haplo);
     nbNonRedondant = compte_nombre_doublon(haplo);
-    /* Création de la liste d'haplotypes non redondants qui sera utilisee */
+    /* Creation de la liste d'haplotypes non redondants */
     haploNonRedondant = lister_haplo_non_redondant(nbNonRedondant, haplo);
     
     /* Affichage des résultats */
@@ -117,13 +115,22 @@ int main(int argc,char* argv[])
     fclose(fichier);
     
     /* 
-     * Initialisation des génotypes en tirant aléatoirement des haplotypes 
-     * issues de la liste cree precedemment 
+     * Initialisation des genotypes en tirant aleatoirement des haplotypes 
+     * issues de la liste cree precedemment. 
      */
 	for (i = 0 ; i < NB_INDIV ; i++)
     {
 		geno[i].id=i;
-		initialiser_genotypes(&geno[i],haploNonRedondant,nbNonRedondant);
+		if (TAILLE_GENO < 11)
+		{
+			/* Tirage des 2 haplotypes dans le pool d'haplotypes */
+			initialiser_genotypes_petite_taille(&geno[i],haploNonRedondant,nbNonRedondant);
+		}
+		else
+		{
+			/* Tirage d'1 haplotype dans le pool d'haplotypes et generation aleatoire du deuxieme */
+			initialiser_genotypes(&geno[i],haploNonRedondant,nbNonRedondant);
+		}		
 	}
 	
 	/* Liberation de l'espace memoire alloue au tableau de genotypes */

@@ -55,11 +55,14 @@ typedef struct TypeGeno
 void test_existence(const char* nomFichier);
 int* alloue_memoire();
 void initialiser_haplotypes(TypeHaplo* haplo);
+int* generer_haplotype();
 /*void afficher_haplotypes(TypeHaplo haplo);*/
 void afficher_genotypes(TypeGeno geno);
 void afficher_haplotypes(TypeHaplo haplo);
 TypeBool verification_presence_doublon(TypeHaplo haplo1, TypeHaplo haplo2);
-TypeBool verification_nombre_loci(TypeHaplo haplo1, TypeHaplo haplo2);
+TypeBool verification_nombre_loci_petite_taille(TypeHaplo haplo1, TypeHaplo haplo2);
+TypeBool verification_nombre_loci(int* haplo1, int* haplo2);
+void initialiser_genotypes_petite_taille(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant);
 void initialiser_genotypes(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant);
 void recherche_haplotype_doublon(TypeHaplo haplo[]);
 int compte_nombre_doublon(TypeHaplo haplo[]);

@@ -51,7 +51,6 @@ static void ecrire_haplotypes(TypeHaplo haplo, FILE* fic)
 		fprintf(fic,"%d",haplo.haplotype[colonne]);
 	}
 	fprintf(fic,"\n");
-	/*(test)printf("\tdoublon=%d\n",haplo.doublon);*/
 }
 
 /* Fonction de creation de genotypes */
@@ -176,12 +175,10 @@ TypeBool verification_presence_doublon(TypeHaplo haplo1, TypeHaplo haplo2){
 		}
 		i++;
 	}
-	/* (test)Affichage de doublon lorsqu'il y en a un de present */
-	/* (test)printf("doublon-%d\n",verifPresenceDoublon);*/
 	return verifPresenceDoublon;
 }
 
-/* (test)Affichage d'un tableau 2D d'haplotype */
+#if 0/* Affichage d'un tableau 2D d'haplotype */
 void afficher_haplotypes(TypeHaplo haplo){
 	int colonne;
 	for (colonne = 0 ; colonne < TAILLE_GENO ; colonne++)
@@ -191,7 +188,9 @@ void afficher_haplotypes(TypeHaplo haplo){
 	printf("\n");
 	/*(test)printf("\tdoublon=%d\n",haplo.doublon);*/
 }
+#endif
 
+#if 0
 /* (test)Fonction d'affichage d'un genotype */
 void afficher_genotypes(TypeGeno geno){
 	int colonne;
@@ -202,68 +201,7 @@ void afficher_genotypes(TypeGeno geno){
 	}
 	printf("\n");
 }
-
-/*
- * Verifie si les 2 haplotypes selectionnes aleatoirement
- * sont compatibles avec les differentes regles imposees :
- *  '-> Aucun doublon
- *  '-> Il n'y a pas plus de nb_loci differents entre les 2 haplotypes. 
- */
-TypeBool verification_nombre_loci(TypeHaplo haplo1, 
-									TypeHaplo haplo2){
-	TypeBool verifNbLoci = VRAI;
-	int count = 0; /* compte le nombre de differences observees */
-	int i = 0;
-	while ((verifNbLoci == VRAI) && (i < TAILLE_GENO))
-	{
-		if(haplo1.haplotype[i] != haplo2.haplotype[i])
-		{
-			count ++;
-		}
-		/* si le comptage est superieur au nb de loci autorise,
-           les haplotypes ne sont pas selectionnes */
-		if(count > NB_LOCI)
-		{ 
-			verifNbLoci = FAUX;
-		}
-		i++;
-	}
-	
-	#if 0
-	afficher_haplotypes(haplo1);
-	afficher_haplotypes(haplo2);
-	printf("NB LOCI : %d\n",NB_LOCI);
-	printf("*** %d ***\n",verifNbLoci);
-	#endif
-	return verifNbLoci;
-}
-
-/*
- * Fait la selection des 2 haplotypes repondant aux criteres, 
- * initialise ensuite haplo1 et 2 du genotype
- * et enfin initialise le genotype a partir des 2 haplotypes.
- */
-void initialiser_genotypes(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant)
-{
-	int h1, h2; /* nb tire aleatoirement parmi 0 et nb_haplo-1 */
-	TypeBool nbLociDiffCorrect;
-	h1 = tirage_au_sort(nbHaploNonRedondant);
-	h2 = tirage_au_sort(nbHaploNonRedondant);
-	nbLociDiffCorrect = verification_nombre_loci(haplo[h1],haplo[h2]);
-	while (nbLociDiffCorrect == FAUX)
-	{
-		h2 = tirage_au_sort(nbHaploNonRedondant);
-		nbLociDiffCorrect = verification_nombre_loci(haplo[h1],haplo[h2]);
-	}
-	adrGeno->haplo1.haplotype = alloue_memoire();
-	adrGeno->haplo1.haplotype = haplo[h1].haplotype;
-	adrGeno->haplo2.haplotype = alloue_memoire();
-	adrGeno->haplo2.haplotype = haplo[h2].haplotype;
-	creation_genotypes(adrGeno);
-	creation_fichier_geno_haplo(adrGeno, adrGeno->haplo1, adrGeno->haplo2);
-	creation_fichier_geno(adrGeno);
-    free(adrGeno->genotype);
-}
+#endif
 
 /* Recherche des haplotypes redondant et les marques */
 void recherche_haplotype_doublon(TypeHaplo haplo[])
@@ -318,4 +256,136 @@ TypeHaplo* lister_haplo_non_redondant(int compteur, TypeHaplo haplo[])
 		}
 	}
 	return haploNonRedondant;
+}
+
+/* ================== Partie 1 : Petite taille de genotype (= <10) ============================== */
+/*
+ * Verifie si les 2 haplotypes selectionnes aleatoirement
+ * sont compatibles avec les differentes regles imposees :
+ *  '-> Aucun doublon
+ *  '-> Il n'y a pas plus de nb_loci differents entre les 2 haplotypes que le max. 
+ */
+TypeBool verification_nombre_loci_petite_taille(TypeHaplo haplo1, TypeHaplo haplo2){
+	TypeBool verifNbLoci = VRAI;
+	int count = 0; /* compte le nombre de differences observees */
+	int i = 0;
+	while ((verifNbLoci == VRAI) && (i < TAILLE_GENO))
+	{
+		if(haplo1.haplotype[i] != haplo2.haplotype[i])
+		{
+			count ++;
+		}
+		/* si le comptage est superieur au nb de loci autorise,
+           les haplotypes ne sont pas selectionnes */
+		if(count > NB_LOCI)
+		{ 
+			verifNbLoci = FAUX;
+		}
+		i++;
+	}
+	
+	#if 0
+	afficher_haplotypes(haplo1);
+	afficher_haplotypes(haplo2);
+	printf("NB LOCI : %d\n",NB_LOCI);
+	printf("*** %d ***\n",verifNbLoci);
+	#endif
+	return verifNbLoci;
+}
+
+/*
+ * Fait la selection des 2 haplotypes repondant aux criteres, 
+ * initialise ensuite haplo1 et 2 du genotype
+ * et enfin initialise le genotype a partir des 2 haplotypes.
+ */
+void initialiser_genotypes_petite_taille(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant)
+{
+	int h1, h2; /* nb tire aleatoirement parmi 0 et nb_haplo-1 */
+	TypeBool nbLociDiffCorrect;
+	h1 = tirage_au_sort(nbHaploNonRedondant);
+	h2 = tirage_au_sort(nbHaploNonRedondant);
+	nbLociDiffCorrect = verification_nombre_loci_petite_taille(haplo[h1],haplo[h2]);
+	while (nbLociDiffCorrect == FAUX)
+	{
+		h2 = tirage_au_sort(nbHaploNonRedondant);
+		nbLociDiffCorrect = verification_nombre_loci_petite_taille(haplo[h1],haplo[h2]);
+	}
+	adrGeno->haplo1.haplotype = alloue_memoire();
+	adrGeno->haplo1.haplotype = haplo[h1].haplotype;
+	adrGeno->haplo2.haplotype = alloue_memoire();
+	adrGeno->haplo2.haplotype = haplo[h2].haplotype;
+	creation_genotypes(adrGeno);
+	creation_fichier_geno_haplo(adrGeno, adrGeno->haplo1, adrGeno->haplo2);
+	creation_fichier_geno(adrGeno);
+    free(adrGeno->genotype);
+}
+
+/* ====================== Partie 2 : Taille de genotype < 10 ==================================== */
+
+/*
+ * Verifie si les 2 haplotypes selectionnes aleatoirement
+ * sont compatibles avec les differentes regles imposees
+ */
+TypeBool verification_nombre_loci(int* haplo1, int* haplo2){
+	TypeBool verifNbLoci = VRAI;
+	int count = 0; /* compte le nombre de differences observees */
+	int i = 0;
+	while ((verifNbLoci == VRAI) && (i < TAILLE_GENO))
+	{
+		if(haplo1[i] != haplo2[i])
+		{
+			count ++;
+		}
+		/* si le comptage est superieur au nb de loci autorise,
+           les haplotypes ne sont pas selectionnes */
+		if(count > NB_LOCI)
+		{ 
+			verifNbLoci = FAUX;
+		}
+		i++;
+	}
+	return verifNbLoci;
+}
+
+/* Generation de l'haplotype complementaire */
+int* generer_haplotype(){
+    int* haplo;
+    int colonne;
+    haplo = alloue_memoire();
+    for (colonne = 0 ; colonne < TAILLE_GENO ; colonne++)
+    {
+        haplo[colonne] = random_binaire();
+    }
+    return haplo;
+}
+
+/*
+ * Fait la selection d'1 haplotype du pool, recherche un haplotype complementaire,
+ * et enfin initialise le genotype a partir des 2 haplotypes.
+ */
+void initialiser_genotypes(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant)
+{
+	int h1; /* nb tire aleatoirement parmi 0 et nb_haplo-1 */
+	int* haplo1;
+    int* haplo2;
+    TypeBool nbLociDiffCorrect;
+    haplo1 = alloue_memoire();
+    haplo2 = alloue_memoire();
+	h1 = tirage_au_sort(nbHaploNonRedondant);
+	haplo1 = haplo[h1].haplotype;
+    haplo2 = generer_haplotype();
+	nbLociDiffCorrect = verification_nombre_loci(haplo1,haplo2);
+	while (nbLociDiffCorrect == FAUX)
+	{
+		haplo2 = generer_haplotype();
+		nbLociDiffCorrect = verification_nombre_loci(haplo1,haplo2);
+	}
+	adrGeno->haplo1.haplotype = alloue_memoire();
+	adrGeno->haplo1.haplotype = haplo1;
+	adrGeno->haplo2.haplotype = alloue_memoire();
+	adrGeno->haplo2.haplotype = haplo2;
+	creation_genotypes(adrGeno);
+	creation_fichier_geno_haplo(adrGeno, adrGeno->haplo1, adrGeno->haplo2);
+	creation_fichier_geno(adrGeno);
+    free(adrGeno->genotype);
 }
