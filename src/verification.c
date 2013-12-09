@@ -17,16 +17,16 @@ int main()
 	/* ====== Declarations ====== */
     
     int i = 0;
-    int nbErreurs = 0;
+    int nbErreurs = 0;      /* Nombre de mauvaises inférences d'haplotypes */
     int nbIndiv = 0;
     int tailleGeno = 0;
     int nbLoci = 0;
-    int* theoGeno = NULL;
-    int* theoHaplo1 = NULL;
-    int* theoHaplo2 = NULL;
-    int* resGeno = NULL;
-    int* resHaplo1 = NULL;
-    int* resHaplo2 = NULL;
+    int* theoGeno = NULL;   /* Contient le genotype reel */
+    int* theoHaplo1 = NULL; /* Contient l'haplotype1 reel */
+    int* theoHaplo2 = NULL; /* Contient l'haplotype2 reel */
+    int* resGeno = NULL;    /* Contient le genotype */
+    int* resHaplo1 = NULL;  /* Contient l'haplotype1 inféré */
+    int* resHaplo2 = NULL;  /* Contient l'haplotype2 inféré */
     FILE* fichierParam = NULL;
     FILE* theorique = NULL;
     FILE* resultats = NULL;
@@ -66,18 +66,23 @@ int main()
         {
             for (i=0; i < nbIndiv; i++)
             {
+                /* Recupere le genotype reel et ses deux haplotypes */
                 lire_geno_haplos_theo(theoGeno, theoHaplo1, theoHaplo2, theorique, tailleGeno);
                 if (!verif_combinaison_haplo(theoGeno, theoHaplo1, theoHaplo2, tailleGeno))
                     fprintf(stderr, "Une paire d'haplotype ne forme pas correctement son genotype.\n");
                 
+                /* Recupere le genotype et ses deux haplotypes inferes*/
                 lire_geno_haplos_res(resGeno, resHaplo1, resHaplo2, resultats, tailleGeno);
                 if (!verif_combinaison_haplo(resGeno, resHaplo1, resHaplo2, tailleGeno))
                     fprintf(stderr, "Une paire d'haplotype ne forme pas correctement son genotype.\n");
                 
+                /* Teste l'egalite entre les genotypes */
                 if (!comparaison_geno(theoGeno, resGeno, tailleGeno))
                     fprintf(stderr, "Les genotypes ne sont pas identiques.\n");
                 
-                if (verif_doublon(theoHaplo1, resHaplo1, tailleGeno) || verif_doublon(theoHaplo1, resHaplo2, tailleGeno))
+                /* Verifie si les haplotypes inferes correspondent aux haplotypes reels */
+                if (verif_doublon(theoHaplo1, resHaplo1, tailleGeno) || 
+                    verif_doublon(theoHaplo1, resHaplo2, tailleGeno))
                 {
                     printf("Indiv n°%d : OK\n",i);
                 }
@@ -86,20 +91,6 @@ int main()
                     printf("Indiv n°%d : Erreur !\n",i);
                     nbErreurs++;
                 }
-                   
-                /*if ((!comparaison_haplo(theoHaplo1, resHaplo2, tailleGeno)) || (!comparaison_haplo(theoHaplo1, resHaplo1, tailleGeno)))
-                {
-                    fprintf(stderr, "Erreur pour l'individu: %d\n", i);
-                     nbErreurs++;
-                }
-                if(!comparaison_haplo(theoHaplo1, resHaplo2, tailleGeno))
-                {   
-                    printf("h1 == h2\n");
-                }
-                if(!comparaison_haplo(theoHaplo1, resHaplo2, tailleGeno))
-                {   
-                    printf("h1 == h1\n");
-                }*/   
             }
                 printf("Nombre d'haplotypes correctement inférés: %d/%d\n", nbIndiv-nbErreurs,nbIndiv);
                 printf("Pourcentage des haplotypes bien inférés : %.2f%%\n",((nbIndiv-nbErreurs)*1.0/(nbIndiv*1.0)*100));

@@ -25,7 +25,6 @@ struct TypeGenoExplique
     int id;
     int idHaploCompl;
     int nbIndGeno;
-    /*int proba;*/
     TypeGenoExplique* next;
     TypeGenoExplique* prev;
 };
@@ -37,7 +36,6 @@ struct TypeHaplo
     int id;
     float freq;
     int doublon;
-    int taille;
     int* haplotype;
     TypeGenoExplique* teteGeno;
     TypeGenoExplique* first;
@@ -60,7 +58,6 @@ typedef struct TypeGeno TypeGeno;
 struct TypeGeno
 {
     int id;
-    int taille;
     int nbLociAmbigu;
     int nbHaplo;
     int nbIdentique;
@@ -78,21 +75,14 @@ struct TypeGeno
 
 TypeHaplo* initialiser_liste_geno(int tailleGeno);
 TypeGeno* initialiser_liste_haplo(int tailleGeno);
-void ajout_tete(TypeHaplo* liste, int id);
 void ajout_queue_geno(TypeHaplo* liste, int id, int idHaplo);
 void ajout_queue_paire_haplo(TypeGeno* liste, int id1, int id2);
-void ajout_pos(TypeHaplo* liste, int id, int position);
-/*void sup_pos(TypeHaplo* liste, int position);*/
-void sup_case_id(TypeHaplo* liste, int id);
-void sup_ids(TypeHaplo* liste, int id);
 void suppression_liste_geno(TypeHaplo** ptrListe);
 void suppression_liste_paire_haplo(TypeGeno** ptrListe);
 TypeGenoExplique* recherche_id_geno(TypeHaplo* liste, int id);
 TypePaireHaplo* recherche_id_paire_haplo(TypeGeno* liste, int id);
-void modif_liste(TypeHaplo* liste, int id, int new_id);
 void affichage_liste_geno(TypeHaplo* liste);
 void affichage_liste_paire_haplo(TypeGeno* liste);
-int taille_Liste(TypeHaplo* liste);
 int* id_pos(TypeGeno* liste, int position);
 
 

@@ -29,7 +29,6 @@ TypeHaplo* initialiser_liste_geno(int tailleGeno)
     liste->haplotype = (int*)malloc(sizeof(int) * tailleGeno);
     liste->id = 0;
     liste->freq = 0.00;
-    liste->taille = 0;
     liste->teteGeno = NULL;
     liste->first = NULL;
     liste->last = NULL;
@@ -49,7 +48,6 @@ TypeGeno* initialiser_liste_haplo(int tailleGeno)
     }
     
     liste->id = 0;
-    liste->taille = 0;
     liste->nbHaplo = 0;
     liste->nbIdentique = 1;
     liste->probaPrec = 0;
@@ -60,38 +58,6 @@ TypeGeno* initialiser_liste_haplo(int tailleGeno)
     liste->last = NULL;
     
     return liste;
-}
-
-/* Fonction d'ajout d'un element en debut de liste */
-void ajout_tete(TypeHaplo* liste, int id)
-{
-    if (liste != NULL)
-    {
-        /* Creation du nouvel element de la liste */
-        TypeGenoExplique* nouvelleCase = malloc(sizeof(TypeGenoExplique));
-        if (nouvelleCase == NULL)
-        {
-            fprintf(stderr, "Un problème d'allocation mémoire est survenu.\n");
-            exit(1);
-        }
-        nouvelleCase->id =id;
-        nouvelleCase->prev = NULL;
-        
-        /* Cas ou la liste est vide */
-        if (liste->first == NULL)
-        {
-            liste->first = nouvelleCase;
-            liste->last = nouvelleCase;
-            nouvelleCase->next = NULL;
-        }
-        else
-        {
-            nouvelleCase->next = liste->first;
-            liste->first->prev = nouvelleCase;
-            liste->first = nouvelleCase;
-        }
-        liste->taille++; /* Incrementation de la taille de la liste */
-    }  
 }
 
 /* Fonction d'ajout d'un genotype en fin de liste */
@@ -123,7 +89,6 @@ void ajout_queue_geno(TypeHaplo* liste, int id, int idHaplo)
             liste->last->next = nouvelleCase;
             liste->last = nouvelleCase;
         }
-        liste->taille++; /* Incrementation de la taille de la liste */
     }
 }
 
@@ -156,183 +121,6 @@ void ajout_queue_paire_haplo(TypeGeno* liste, int id1, int id2)
             liste->last->next = nouvelleCase;
             liste->last = nouvelleCase;
         }
-        liste->taille++; /* Incrementation de la taille de la liste */
-    }
-}
-
-#if 0
-/* Fonction permettant l'ajout d'un element a la position souhaitee */
-void ajout_pos(TypeHaplo* liste, int id, int position)
-{
-    int i = 1;          /* Compteur */
-    TypeGenoExplique* ptr = NULL;   /* Pointeur de parcours de liste */
-    
-    
-    if (liste != NULL)
-    {
-        ptr = liste->first;
-        
-        while ((i <= position) && (ptr != NULL))
-        {
-            if (position == i)
-            {
-                /* Cas ou position est en fin de liste */
-                if (ptr->next == NULL)
-                {
-                    ajout_queue_geno(liste, id);
-                }
-                /* Cas ou position est en tete de liste */
-                else if (ptr->prev == NULL)
-                {
-                    ajout_tete(liste, id);
-                }
-                else
-                {
-                    /* Creation du nouvel element de la liste */
-                    TypeGenoExplique* nouvelleCase = malloc(sizeof(TypeGenoExplique));
-                    if (nouvelleCase == NULL)
-                    {
-                        fprintf(stderr, "Un problème d'allocation mémoire est survenu.\n");
-                        exit(1);
-                    }
-                    nouvelleCase->id =id;
-                    ptr->next->prev = nouvelleCase;
-                    ptr->prev->next = nouvelleCase;
-                    nouvelleCase->prev = ptr->prev;
-                    nouvelleCase->next = ptr;
-                    liste->taille++;
-                }
-            }
-            else
-            {
-                ptr = ptr->next;
-            }
-            i++;
-        }
-    }
-}
-#endif
-
-/* Fonction supprimant un element en fonction de sa position */
-void sup_pos(TypeHaplo* liste, int position)
-{
-    int i = 1;                   /* Compteur */
-    TypeGenoExplique* ptr = liste->first; /* Pointeur de parcours de liste */
-    
-    if (liste != NULL)
-    {
-        while ((ptr != NULL) && (i <= position))
-        {
-            if (position == i)
-            {
-                /* Cas ou l'on se trouve en fin de liste */
-                if (ptr->next == NULL)
-                {
-                    liste->last = ptr->prev;
-                    liste->last->next = NULL;
-                }
-                /* Cas ou l'on se trouve en début de liste */
-                else if (ptr->prev == NULL)
-                {
-                    liste->first = ptr->next;
-                    liste->first->prev = NULL;
-                }
-                else
-                {
-                    ptr->next->prev = ptr->prev;
-                    ptr->prev->next = ptr->next;
-                }
-                free(ptr);
-                liste->taille--;
-            }
-            else
-            {
-                ptr = ptr->next;
-            }
-            i++;
-        }
-    }
-}
-
-/* Fonction supprimant la case contenant l'id passe en parametre */
-void sup_case_id(TypeHaplo* liste, int id)
-{
-    bool_t trouve = 0;
-    TypeGenoExplique* ptr = liste->first; /* Pointeur de parcours de liste */
-    
-    if (liste != NULL)
-    {
-        while ((ptr != NULL) && (!trouve))
-        {
-            if (ptr->id == id)
-            {
-                /* Cas ou l'on se trouve en fin de liste */
-                if (ptr->next == NULL)
-                {
-                    liste->last = ptr->prev;
-                    liste->last->next = NULL;
-                }
-                /* Cas ou l'on se trouve ne debut de liste */
-                else if (ptr->prev == NULL)
-                {
-                    liste->first = ptr->next;
-                    liste->first->prev = NULL;
-                }
-                else
-                {
-                    ptr->next->prev = ptr->prev;
-                    ptr->prev->next = ptr->next;
-                }
-                free(ptr);
-                liste->taille--;
-                trouve = 1;
-            }
-            else
-            {
-                ptr=ptr->next;
-            }
-        }
-        
-    }
-}
-
-/* Fonction supprimant tous les elements ayant le meme id */
-void sup_ids(TypeHaplo* liste, int id)
-{
-    TypeGenoExplique* ptr = liste->first; /* Pointeur de parcours de liste */
-    
-    if (liste != NULL)
-    {
-        while (ptr != NULL)
-        {
-            if (ptr->id == id)
-            {
-                /* Cas ou l'on se trouve en fin de liste */
-                if (ptr->next == NULL)
-                {
-                    liste->last = ptr->prev;
-                    liste->last->next = NULL;
-                }
-                /* Cas ou l'on se trouve ne debut de liste */
-                else if (ptr->prev == NULL)
-                {
-                    liste->first = ptr->next;
-                    liste->first->prev = NULL;
-                }
-                else
-                {
-                    ptr->next->prev = ptr->prev;
-                    ptr->prev->next = ptr->next;
-                }
-                free(ptr);
-                liste->taille--;
-            }
-            else
-            {
-                ptr=ptr->next;
-            }
-        }
-        
     }
 }
 
@@ -422,21 +210,6 @@ TypePaireHaplo* recherche_id_paire_haplo(TypeGeno* liste, int id)
     return ptr;
 }
 
-/* Fonction modifiant les informations d'un element de la liste */
-void modif_liste(TypeHaplo* liste, int id, int new_id)
-{
-    TypeGenoExplique* ptr = recherche_id_geno(liste, id);
-    if (ptr == NULL)
-    {
-        fprintf(stderr, "La modification de liste n'a pu se faire.\n");
-        return;
-    }
-    else
-    {
-        ptr->id = new_id;
-    }
-}
-
 /* Fonction affichant chaque genotype de la liste */
 void affichage_liste_geno(TypeHaplo* liste)
 {
@@ -475,19 +248,6 @@ void affichage_liste_paire_haplo(TypeGeno* liste)
     {
         printf("La liste est vide.\n");
     }
-}
-
-/* Fonction retournant la taille d'une liste */
-int taille_liste(TypeHaplo* liste)
-{
-    int taille = 0;
-    
-    if (liste != NULL)
-    {
-        taille = liste->taille;
-    }
-    
-    return taille;
 }
 
 /* Fonction donnant l'idHaplo1 d'une paire d'haplotypes à telle position */

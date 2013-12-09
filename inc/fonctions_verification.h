@@ -1,7 +1,7 @@
 #ifndef H_FONCTIONS_VERIFICATION
 #define H_FONCTIONS_VERIFICATION
 
-/* fonctions.h */
+/* fonctions_verification.h */
 
 /*
  * Auteurs: Julie Pelletier
@@ -30,5 +30,6 @@ bool_t verif_combinaison_haplo(int* geno, int* haplo1, int* haplo2, int tailleGe
 bool_t comparaison_haplo(int* haplo1, int* haplo2, int tailleGeno);
 bool_t comparaison_geno(int* geno1, int* geno2, int tailleGeno);
 bool_t verif_doublon(int* seq1, int* seq2, int tailleGeno);
+
 
 #endif /* H_FONCTIONS_VERIFICATION */
