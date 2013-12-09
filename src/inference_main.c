@@ -27,7 +27,6 @@ int main(int argc, char* argv[])
     int nbHaploNonRedondant = 0;
     int nbGenoNonRedondant = 0;
     int lireTaille = 0;         /* taille memoire pour la lecture de ligne */
-    /*int* idsPaireHaplo = NULL;   tableau contenant les ids de la paire d'haplos la plus vrai semblable */
     char* nomFichier;           /* fichier contenant les genotypes */
     char* chaine = NULL;        /* chaine qui contiendra les lignes du fichier geno */
     char* sousChaine = NULL;    /* pointeur sur la partie code du genome */
@@ -38,8 +37,8 @@ int main(int argc, char* argv[])
     FILE* resultats_freq = NULL;
     FILE* resultats_haplo = NULL;
     TypeGeno* geno = NULL;
-    TypeHaplo** tabHaploNR = NULL; /* tableau d'haplotypes non redondant */
-    TypeGeno** tabGenoNR = NULL;   /* tableau de genotypes non redondant */
+    TypeHaplo** tabHaploNR = NULL; /* tableau d'haplotypes non redondants */
+    TypeGeno** tabGenoNR = NULL;   /* tableau de genotypes non redondants */
     
      /* ========== Code ========== */
     
@@ -161,15 +160,15 @@ int main(int argc, char* argv[])
     }
     #endif
 
-    /* Calcul du nombre total et du nombre d'haplotypes non redondant */
+    /* Calcul du nombre total et du nombre d'haplotypes non redondants */
     nbHaploNonRedondant = calcul_nb_haplo_non_redondant(geno);
     nbGenoNonRedondant = calcul_nb_geno_non_redondant(geno);
     #if 0
-    printf("Nb de Haplo non redondant : %d\n", nbHaploNonRedondant);
-    printf("Nb de Geno non redondant : %d\n", nbGenoNonRedondant);
+    printf("Nb de Haplo non redondants : %d\n", nbHaploNonRedondant);
+    printf("Nb de Geno non redondants : %d\n", nbGenoNonRedondant);
     #endif
 
-    /* Allocation du tableau d'haplotypes non redondant */
+    /* Allocation du tableau d'haplotypes non redondants */
     tabHaploNR = (TypeHaplo**)malloc(sizeof(TypeHaplo*) * nbHaploNonRedondant);
     if (tabHaploNR == NULL)
     {
@@ -403,7 +402,7 @@ int main(int argc, char* argv[])
             }
             fprintf(resultats_haplo, "\n");
             id = 0;
-            /* Regarde à quel indice dans le tableau de genotypes non redondant se trouve
+            /* Regarde à quel indice dans le tableau de genotypes non redondants se trouve
              * le genotype de l'individu */
             for (c=0; c < nbGenoNonRedondant; c++)
             {

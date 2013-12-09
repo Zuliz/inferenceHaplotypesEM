@@ -307,11 +307,11 @@ void inference_haplotype_em(int nbGeno, int nbHaplo, int nbEtapeMax,
 /* Recherche la paire d'haplotype la plus vraisemblable */
 int* recherche_meilleure_paire_haplo(TypeGeno* liste, double** tabFreqHaplo, int taille)
 {
-    float freq1, freq2, freqTotal = 0.00;   /* Plus grande frequence d'haplotype trouvee pour le genotype */
-    int i, j, k = 0;        /* Compteurs */
+    float freq1, freq2, freqTotal = 0.00;   
+    int i, j, k = 0;            /* Compteurs */
     static int idsHaplo[2];     /* Ids de la paire d'haplotypes ayant la meilleure frequence */
-    int* tabIds = NULL;  /* Recoit les ids de la paire d'haplotypes à comparer */
-    static int* ids = idsHaplo; /* Contient les deux ids de la paire d'haplotypes à retourner */
+    int* tabIds = NULL;         /* Recoit la paire d'id d'haplotypes a tester */
+    static int* ids = idsHaplo; /* Pointeur sur la paire d'ids qui sera retourné */
     
     /* Parcours de chaque paire d'haplo */                      
     for (i=1; i <= liste->nbHaplo; i++)
@@ -343,7 +343,7 @@ int* recherche_meilleure_paire_haplo(TypeGeno* liste, double** tabFreqHaplo, int
         }
     }
 
-    return ids; /* Retour de les ids de la paire d'haplotypes ayant la plus grande frequence */
+    return ids; /* Retour des ids de la paire d'haplotypes ayant la plus grande frequence */
 }
 
 /* Fonction permettant l'ecriture de la paire la plus vraisemblable pour un genotype donne */
@@ -358,7 +358,7 @@ void ecriture_paire_haplotype(TypeGeno** tabGenoNR, double** tabFreqHaplo, int n
     /* Ecriture du premier haplo de la paire */
     fprintf(resultats_haplo, "/ind %d haplo1 ", k);
     idsPaireHaplo = recherche_meilleure_paire_haplo(tabGenoNR[i], tabFreqHaplo, nbHaploNonRedondant);
-    /* Recherche du 1er haplotype de la paire dans le tableau d'haplotypes non redondant */
+    /* Recherche du 1er haplotype de la paire dans le tableau d'haplotypes non redondants */
     for (c=0; c < nbHaploNonRedondant; c++)
     {
         if (idsPaireHaplo[0] == tabHaploNR[c]->id)
@@ -373,7 +373,7 @@ void ecriture_paire_haplotype(TypeGeno** tabGenoNR, double** tabFreqHaplo, int n
     
     /* Ecriture du deuxieme haplo de la paire */
     fprintf(resultats_haplo, "/ind %d haplo2 ", k);
-    /* Recherche du 2eme haplotype de la paire dans le tableau d'haplotypes non redondant */
+    /* Recherche du 2eme haplotype de la paire dans le tableau d'haplotypes non redondants */
     for (c=0; c < nbHaploNonRedondant; c++)
     {
         if (idsPaireHaplo[1] == tabHaploNR[c]->id)
