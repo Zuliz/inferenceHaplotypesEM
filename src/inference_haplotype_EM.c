@@ -310,7 +310,7 @@ int* recherche_meilleure_paire_haplo(TypeGeno* liste, double** tabFreqHaplo, int
     float freq1, freq2, freqTotal = 0.00;   
     int i, j, k = 0;            /* Compteurs */
     static int idsHaplo[2];     /* Ids de la paire d'haplotypes ayant la meilleure frequence */
-    int* tabIds = NULL;         /* Recoit la paire d'id d'haplotypes a tester
+    int* tabIds = NULL;         /* Recoit la paire d'id d'haplotypes a tester */
     static int* ids = idsHaplo; /* Pointeur sur la paire d'ids qui sera retourné */
     
     /* Parcours de chaque paire d'haplo */                      
