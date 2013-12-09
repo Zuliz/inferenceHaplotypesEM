@@ -36,7 +36,7 @@ TypeHaplo* initialiser_liste_geno(int tailleGeno)
     return liste;
 }
 
-/* Focntion d'initilisation d'une liste chainee de paires d'haplotypes */
+/* Fonction d'initilisation d'une liste chainee de paires d'haplotypes */
 TypeGeno* initialiser_liste_haplo(int tailleGeno)
 {
     /* Allocation de l'haplotype */

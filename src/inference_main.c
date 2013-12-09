@@ -188,7 +188,6 @@ int main(int argc, char* argv[])
     {
         for (j=0; j < geno[i].nbHaplo; j++)
         {
-            /*printf("G%d - H%d\n",geno[i].id,geno[i].matriceHaplo[j].id);*/
             if (geno[i].matriceHaplo[j].doublon == 0)
             {
                 tabHaploNR[c]->id = geno[i].matriceHaplo[j].id;
@@ -228,7 +227,8 @@ int main(int argc, char* argv[])
                 {
                     if (tabHaploNR[c]->id == geno[i].matriceHaplo[j].id)
                     {
-                        ajout_queue_geno(tabHaploNR[c], geno[i].id,geno[i].matriceHaplo[recherche_haplo_complementaire(geno[i],j)].id);
+                        ajout_queue_geno(tabHaploNR[c], geno[i].id,geno[i].matriceHaplo[
+                                                    recherche_haplo_complementaire(geno[i],j)].id);
                     }
                 }
                 idGenoMax = geno[i].id;
@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
         tabGenoNR[i] = initialiser_liste_haplo(TAILLE_GENO);
     }
     
-    /* Affection des genotypes dans leur tableau */
+    /* Affectation des genotypes dans leur tableau */
     c = 0;
     for (i=0; i < NB_INDIV; i++)
     {

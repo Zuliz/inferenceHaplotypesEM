@@ -23,7 +23,6 @@ int tailleGeno;
 
 /* fonctions tests ============================================================================== */
 
-void affichage_haplotypes(TypeGeno geno);
 void affichage_genotype(TypeGeno geno);
 void affichage_haplotype(TypeHaplo haplo);
 int verif_doublon(int* seq1, int* seq2);

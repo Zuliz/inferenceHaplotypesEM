@@ -11,10 +11,10 @@
 #include <string.h>
 #include "../inc/generation_haplotypes.h"
 
-/* fonctions tests =========================================================================== */
+/* fonctions tests ============================================================================== */
 
-/* Affichage des haplytpes */
-void affichage_haplotypes(TypeGeno geno)
+#if 1
+static void affichage_haplotypes(TypeGeno geno)
 {
     int i;
     int j;
@@ -52,10 +52,11 @@ void affichage_haplotype(TypeHaplo haplo)
         }
         printf("\n");
 }
+#endif
 
-/* fonctions privees ========================================================================= */
+/* fonctions privees ============================================================================ */
 
-/* Compte le nombre de loci ambigu pour un genotype donnee */
+/* Compte le nombre de loci ambigus pour un genotype donne */
 static int compte_nombre_loci_ambigu(TypeGeno geno)
 {
     int i;
@@ -70,7 +71,7 @@ static int compte_nombre_loci_ambigu(TypeGeno geno)
     return count;
 }
 
-/* Rempli la matrice d'haplotypes en colonne */
+/* Rempli la matrice d'haplotypes EN COLONNE */
 static void generation_haplo_possibles(TypeHaplo* matrice, int lociMax, 
                                         int countLoci, int colonne, int n)
 {
@@ -100,25 +101,6 @@ static void generation_haplo_possibles(TypeHaplo* matrice, int lociMax,
     } 
 }
 
-#if 0
-static void affichage_haplotypes(TypeGeno geno)
-{
-    int i;
-    int j;
-    for(i = 0 ; i < geno.nbHaplo ; i++ )
-    {
-        printf("%d : ",geno.matriceHaplo[i].id);
-        for(j = 0 ; j < TAILLE_GENO ; j++)
-        {
-           printf("%d",geno.matriceHaplo[i].haplotype[j]); 
-        }
-        printf("\n");
-    }
-}
-#endif
-
-
-
 /* Verifie chiffre par chiffre si les 2 haplotypes sont egaux */
 int verif_doublon(int* seq1, int* seq2)
 {
@@ -133,12 +115,10 @@ int verif_doublon(int* seq1, int* seq2)
         }
         i++;
     }
-    /*** TEST 3 ***/
-    /*** TEST 4 ***/
     return verifPresenceDoublon;
 }
 
-/* fonctions publiques ======================================================================= */
+/* fonctions publiques ========================================================================== */
 
 int* alloue_memoire()
 {
@@ -231,7 +211,6 @@ int initialisation_geno(TypeGeno* geno, int id)
     printf("---------------------\n");
     affichage_haplotypes(*geno);
     #endif
-    /*** TEST 5 ***/
 
     return id;
 }
@@ -248,12 +227,10 @@ void recherche_genotype_doublon(TypeGeno* geno1, TypeGeno* geno2)
         geno2->id = geno1->id;
         geno2->doublon = 1;
         geno1->nbIdentique = geno1->nbIdentique +1;
-        /*printf("Genotype %d est redondant !\n",geno1->id);*/
-        /*geno1->nbIdentique=geno1->nbIdentique+1;*/
     }
 }
 
-/* Modification du nombre de genotype identique au gentoype etudie */
+/* Modification du nombre de genotypes identiques au gentoype etudie */
 void modification_nb_geno_identique(int id,TypeGeno* geno)
 {
     int i;
@@ -310,7 +287,7 @@ int calcul_nb_haplo_non_redondant(TypeGeno* geno)
     return count;
 }
 
-/* Calcul le nombre d'haplotypes non redondants */
+/* Calcul le nombre de genotypes non redondants */
 int calcul_nb_geno_non_redondant(TypeGeno* geno)
 {
     int count = 0;
@@ -351,18 +328,4 @@ double** allouer_memoire_tableau_2d(int nb)
         pointeur[i] = malloc(sizeof(double) * 3);
     }
     return pointeur;
-}
-
-bool_t compare_tableaux_entiers(int *tab1, int *tab2, int taille)
-{
-    int i = 0;
-    
-    for (i=0; i < taille; i++) 
-    {
-        if (tab1[i] != tab2[i])
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
 }

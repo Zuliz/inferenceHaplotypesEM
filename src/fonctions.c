@@ -53,6 +53,27 @@ static void ecrire_haplotypes(TypeHaplo haplo, FILE* fic)
 	fprintf(fic,"\n");
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Fonction de creation de genotypes */
 static void creation_genotypes(TypeGeno* adrGeno)
 {
@@ -114,6 +135,20 @@ static void creation_fichier_geno(TypeGeno* adrGeno)
 	}
 	fclose(fichier1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* fonctions publiques ========================================================================== */
 
@@ -190,6 +225,7 @@ void afficher_haplotypes(TypeHaplo haplo){
 }
 #endif
 
+
 #if 0
 /* (test)Fonction d'affichage d'un genotype */
 void afficher_genotypes(TypeGeno geno){
@@ -258,6 +294,14 @@ TypeHaplo* lister_haplo_non_redondant(int compteur, TypeHaplo haplo[])
 	return haploNonRedondant;
 }
 
+
+
+
+
+
+
+
+
 /* ================== Partie 1 : Petite taille de genotype (= <10) ============================== */
 /*
  * Verifie si les 2 haplotypes selectionnes aleatoirement
@@ -298,7 +342,8 @@ TypeBool verification_nombre_loci_petite_taille(TypeHaplo haplo1, TypeHaplo hapl
  * initialise ensuite haplo1 et 2 du genotype
  * et enfin initialise le genotype a partir des 2 haplotypes.
  */
-void initialiser_genotypes_petite_taille(TypeGeno* adrGeno, TypeHaplo haplo[], int nbHaploNonRedondant)
+void initialiser_genotypes_petite_taille(TypeGeno* adrGeno, 
+					TypeHaplo haplo[], int nbHaploNonRedondant)
 {
 	int h1, h2; /* nb tire aleatoirement parmi 0 et nb_haplo-1 */
 	TypeBool nbLociDiffCorrect;
@@ -319,6 +364,19 @@ void initialiser_genotypes_petite_taille(TypeGeno* adrGeno, TypeHaplo haplo[], i
 	creation_fichier_geno(adrGeno);
     free(adrGeno->genotype);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ====================== Partie 2 : Taille de genotype < 10 ==================================== */
 

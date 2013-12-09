@@ -73,6 +73,7 @@ void lire_geno_haplos_theo(int* geno, int* haplo1, int* haplo2, FILE* theorique,
         }
     }
     
+    
     /* Recuperation du deuxieme haplotype */
     if(lire(chaine, LIRE_TAILLE, theorique) == 0)
     {
@@ -146,6 +147,10 @@ void lire_geno_haplos_res(int* geno, int* haplo1, int* haplo2, FILE* resultats, 
     free(chaine);
 }
 
+
+
+
+/* Verification de la combinaison de genotype / haplotypes */
 bool_t verif_combinaison_haplo(int* geno, int* haplo1, int* haplo2, int tailleGeno)
 {
     /* Varibles locales */
@@ -204,7 +209,5 @@ bool_t verif_doublon(int* seq1, int* seq2, int tailleGeno)
         }
         i++;
     }
-    /*** TEST 3 ***/
-    /*** TEST 4 ***/
     return verifPresenceDoublon;
 }

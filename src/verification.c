@@ -41,12 +41,14 @@ int main()
         fscanf(fichierParam, "%d", &tailleGeno);
         fscanf(fichierParam, "%d", &nbLoci);
         
-        /* Allocation de la memoire pour le genotype du fichier theorique et sa paire d'haplotypes */ 
+        /* Allocation de la memoire pour le genotype du fichier theorique 
+         * et sa paire d'haplotypes */ 
         theoGeno = malloc(sizeof(int) * tailleGeno);
         theoHaplo1 = malloc(sizeof(int) * tailleGeno);
         theoHaplo2 = malloc(sizeof(int) * tailleGeno);
         
-        /* Allocation de la memoire pour le genotype du fichier resultats et sa paire d'haplotypes */ 
+        /* Allocation de la memoire pour le genotype du fichier resultats 
+         * et sa paire d'haplotypes */ 
         resGeno = malloc(sizeof(int) * tailleGeno);
         resHaplo1 = malloc(sizeof(int) * tailleGeno);
         resHaplo2 = malloc(sizeof(int) * tailleGeno);
@@ -69,12 +71,14 @@ int main()
                 /* Recupere le genotype reel et ses deux haplotypes */
                 lire_geno_haplos_theo(theoGeno, theoHaplo1, theoHaplo2, theorique, tailleGeno);
                 if (!verif_combinaison_haplo(theoGeno, theoHaplo1, theoHaplo2, tailleGeno))
-                    fprintf(stderr, "Une paire d'haplotype ne forme pas correctement son genotype.\n");
+                    fprintf(stderr, 
+                        "Une paire d'haplotype ne forme pas correctement son genotype.\n");
                 
                 /* Recupere le genotype et ses deux haplotypes inferes*/
                 lire_geno_haplos_res(resGeno, resHaplo1, resHaplo2, resultats, tailleGeno);
                 if (!verif_combinaison_haplo(resGeno, resHaplo1, resHaplo2, tailleGeno))
-                    fprintf(stderr, "Une paire d'haplotype ne forme pas correctement son genotype.\n");
+                    fprintf(stderr, 
+                        "Une paire d'haplotype ne forme pas correctement son genotype.\n");
                 
                 /* Teste l'egalite entre les genotypes */
                 if (!comparaison_geno(theoGeno, resGeno, tailleGeno))
@@ -92,13 +96,16 @@ int main()
                     nbErreurs++;
                 }
             }
-                printf("Nombre d'haplotypes correctement inférés: %d/%d\n", nbIndiv-nbErreurs,nbIndiv);
-                printf("Pourcentage des haplotypes bien inférés : %.2f%%\n",((nbIndiv-nbErreurs)*1.0/(nbIndiv*1.0)*100));
+                printf("Nombre d'haplotypes correctement inférés: %d/%d\n", 
+                    nbIndiv-nbErreurs,nbIndiv);
+                printf("Pourcentage des haplotypes bien inférés : %.2f%%\n",
+                    ((nbIndiv-nbErreurs)*1.0/(nbIndiv*1.0)*100));
                 printf("Nombre de loci ambigus : %d\n", nbLoci);
         }
         else
         {
-            fprintf(stderr, "Une erreur s'est produite dans la création du fichier %s\n", RESULTATS);
+            fprintf(stderr, "Une erreur s'est produite dans la création du fichier %s\n",
+                RESULTATS);
             exit(1);
         }
         fclose(resultats);
