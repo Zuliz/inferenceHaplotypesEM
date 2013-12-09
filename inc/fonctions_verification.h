@@ -20,7 +20,7 @@ typedef enum {
 #define PARAM "fichiers/parametres.txt"
 #define THEORIQUE "fichiers/geno_et_haplo.txt"
 #define RESULTATS "fichiers/resultats_haplo.txt"
-#define LIRE_TAILLE 50
+#define LIRE_TAILLE 500
 
 /* point d'entree =============================================================================== */
 
